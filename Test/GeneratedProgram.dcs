@@ -1,0 +1,9 @@
+﻿Namenraum Test;
+
+öffentlich statisch Klasse GeneratedProgram
+{
+    öffentlich statisch Leere Main()
+    {
+        Konsole.SchreibeLinie("Hallo Welt aus deutschem C#!");
+    }
+}

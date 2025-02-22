@@ -1,0 +1,9 @@
+﻿Namenraum Test;
+
+öffentlich statisch Klasse SomeClass
+{
+    privat statisch Leere SomeMethod()
+    {
+        Konsole.SchreibeLinie("Dies ist ein Konsolenoutput für Unittests");
+    }
+}
