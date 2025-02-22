@@ -7,8 +7,8 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|--------------------
-GEN001  |  Usage   |  Error   | InternalError
-GEN002  |  Usage   |  Error   | ClassNotFound
-GEN003  |  Usage   |  Error   | NamespaceNotFound
-GEN004  |  Design   |  Warning | MultipleClassesInFile
-GEN005  |  Design   |  Warning | ClassNameMismatch
+GEN001  | Generator | Error   | InternalError
+GEN002  | Generator | Error   | ClassNotFound
+GEN003  | Generator | Error   | NamespaceNotFound
+GEN004  | Generator | Warning | MultipleClassesInFile
+GEN005  | Generator | Warning | ClassNameMismatch

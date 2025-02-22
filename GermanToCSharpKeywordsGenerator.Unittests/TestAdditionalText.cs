@@ -7,29 +7,22 @@ namespace GermanToCSharpKeywordsGenerator.Unittests;
 /// <summary>
 /// Mock implementation of <see cref="AdditionalText"/> for testing purposes.
 /// </summary>
-public class TestAdditionalText : AdditionalText
+/// <remarks>
+/// Initializes a new instance of <see cref="TestAdditionalText"/> with the given path and content.
+/// </remarks>
+public class TestAdditionalText(string path, string text) : AdditionalText
 {
-    private readonly string _text;
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="TestAdditionalText"/> with the given path and content.
-    /// </summary>
-    public TestAdditionalText(string path, string text)
-    {
-        Path = path;
-        _text = text;
-    }
 
     /// <summary>
     /// Gets the file path.
     /// </summary>
-    public override string Path { get; }
+    public override string Path { get; } = path;
 
     /// <summary>
     /// Returns the content as a <see cref="SourceText"/>.
     /// </summary>
     public override SourceText? GetText(CancellationToken cancellationToken = default)
     {
-        return SourceText.From(_text, Encoding.UTF8);
+        return SourceText.From(text, Encoding.UTF8);
     }
 }
