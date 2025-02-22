@@ -5,7 +5,10 @@ using System.Runtime.InteropServices;
 
 namespace GermanToCSharpKeywordsGenerator.Unittests.Setup;
 
-class TestCompilationHandler
+/// <summary>
+/// Class for generating and running a <see cref="CSharpCompilation"/> with Generators for testing purposes.
+/// </summary>
+public class TestCompilationHandler
 {
     /// <summary>
     /// Creates a <see cref="CSharpCompilation"/> from SDK base dlls. Can be modified with optional <param name="source"></param>.

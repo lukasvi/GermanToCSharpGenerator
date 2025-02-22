@@ -7,6 +7,12 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace GermanToCSharpKeywordsGenerator;
 
+/// <summary>
+/// A source generator that converts fake C# with german keywords in the source code to their corresponding C# keywords.
+/// This generator processes files with a ".dcs" extension and rewrites the code to match C# syntax.
+/// As Intelli-Sense does not support ".dcs" files, it also performs some checks on the file to ensure correct
+/// class names, namespaces and class declarations to aid implementation.
+/// </summary>
 [Generator]
 public class GermanToCSharpKeywordsGenerator : ISourceGenerator
 {
@@ -60,10 +66,10 @@ public class GermanToCSharpKeywordsGenerator : ISourceGenerator
         isEnabledByDefault: true
     );
 
+    ///<inheritdoc/>
     public void Initialize(GeneratorInitializationContext context)
     {
-        // No need for explicit additional file registration
-        // Activate this if neededfor debugging
+        // Activate this if needed for debugging
 #if DEBUG
         //if (!Debugger.IsAttached)
         //{
@@ -72,6 +78,7 @@ public class GermanToCSharpKeywordsGenerator : ISourceGenerator
 #endif
     }
 
+    ///<inheritdoc/>
     public void Execute(GeneratorExecutionContext context)
     {
         try

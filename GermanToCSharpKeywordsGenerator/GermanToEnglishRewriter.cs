@@ -3,6 +3,9 @@ using Microsoft.CodeAnalysis;
 
 namespace GermanToCSharpKeywordsGenerator;
 
+/// <summary>
+/// This class provides functionality to convert German C# keywords into their English equivalents.
+/// </summary>
 public class GermanToEnglishRewriter
 {
     private static readonly Dictionary<string, string> _germanToEnglishKeywords = new()
@@ -37,13 +40,21 @@ public class GermanToEnglishRewriter
         { "Zeichenkette", "string"},
     };
 
+    /// <summary>
+    /// Converts German code keywords to their corresponding English C# keywords while preserving non-keyword elements.
+    /// The method translates the entire code into English first and then reverts specific tokens like comments, strings, and identifiers back to their original German form.
+    /// </summary>
+    /// <param name="sourceCode">The input source code written in German C# keywords.</param>
+    /// <returns>The source code with German keywords translated to their English equivalents, with specific elements like comments and strings unchanged.</returns>
     public static string ConvertGermanToEnglish(string sourceCode)
     {
+        // Translate all to english to get compilable code.
         var translatedCode = TranslateAllToEnglish(sourceCode);
 
         var tree = CSharpSyntaxTree.ParseText(translatedCode);
         var root = tree.GetRoot();
 
+        // Translate comments back
         var rootWithComments = root.ReplaceTrivia(root.DescendantTrivia(), (original, rewritten) =>
         {
             if (original.IsKind(SyntaxKind.SingleLineCommentTrivia) || original.IsKind(SyntaxKind.MultiLineCommentTrivia))
@@ -54,21 +65,19 @@ public class GermanToEnglishRewriter
             return original;
         });
 
+        // Translate strings and identifiers back
         var newRoot = rootWithComments.ReplaceTokens(rootWithComments.DescendantTokens(), (original, rewritten) =>
         {
             var originalText = original.Text;
 
-            // 2. **String- und Char-Literale zurückübersetzen**
             if (original.IsKind(SyntaxKind.StringLiteralToken) || original.IsKind(SyntaxKind.CharacterLiteralToken))
             {
                 var restoredString = RestoreGermanKeywords(originalText);
                 return SyntaxFactory.Token(original.LeadingTrivia, original.Kind(), restoredString, restoredString, original.TrailingTrivia);
             }
 
-            // 3. **Identifizierer (Variablen, Methoden, Klassen, Namespaces) behandeln**
             if (original.IsKind(SyntaxKind.IdentifierToken))
             {
-                // Nur C#-Schlüsselwörter übersetzen
                 string restoredIdentifier = RestoreGermanKeywords(originalText);
                 return SyntaxFactory.Identifier(original.LeadingTrivia, restoredIdentifier, original.TrailingTrivia);
             }
