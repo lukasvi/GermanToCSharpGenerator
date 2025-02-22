@@ -1,13 +1,19 @@
+using GermanToCSharpKeywordsGenerator.Unittests.Setup;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Shouldly;
-using System.Collections.Immutable;
-using System.Runtime.InteropServices;
 
 namespace GermanToCSharpKeywordsGenerator.Unittests;
 
 public class Tests
 {
+    private TestCompilationHandler _compilationHandler;
+
+    [SetUp]
+    public void Setup()
+    {
+        _compilationHandler = new();
+    }
+
     [Test]
     public void SimpleGeneratorTest_Works()
     {
@@ -23,12 +29,13 @@ public class Tests
                 }
             }
             ";
+
         var additionalText = new TestAdditionalText("TestProgram.dcs", germanSourceFile);
 
-        Compilation comp = CreateCompilation(string.Empty);
+        var comp = _compilationHandler.CreateCompilation();
 
         // Act
-        (var newCompilation, var generatorDiagnostics) = RunGenerators(comp, [additionalText], new GermanToCSharpKeywordsGenerator());
+        (var newCompilation, var generatorDiagnostics) = _compilationHandler.RunGenerators(comp, [additionalText], new GermanToCSharpKeywordsGenerator());
 
         // Assert
         generatorDiagnostics.Where(x => x.Severity == DiagnosticSeverity.Error).ShouldBeEmpty();
@@ -36,51 +43,5 @@ public class Tests
 
         // Assert that class / file has been created
         newCompilation.GetTypeByMetadataName("Test.TestProgram").ShouldNotBeNull();
-    }
-
-    private static CSharpCompilation CreateCompilation(string source)
-    {
-        var syntaxTree = CSharpSyntaxTree.ParseText(source, new CSharpParseOptions(LanguageVersion.Preview));
-
-        var globalUsings = File.ReadAllText("Microsoft.NET.Sdk.usings.cs");
-        var usingsTree = CSharpSyntaxTree.ParseText(globalUsings);
-
-        var coreDir = RuntimeEnvironment.GetRuntimeDirectory();
-
-        var references = new[]
-            {
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),   // System.Private.CoreLib.dll
-            MetadataReference.CreateFromFile(typeof(Console).Assembly.Location), // System.Console.dll
-            MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq.dll
-
-            MetadataReference.CreateFromFile(Path.Combine(coreDir, "System.Runtime.dll")),
-            MetadataReference.CreateFromFile(Path.Combine(coreDir, "System.Console.dll")),
-            MetadataReference.CreateFromFile(Path.Combine(coreDir, "System.Collections.dll")),
-            MetadataReference.CreateFromFile(Path.Combine(coreDir, "System.Linq.dll")),
-            MetadataReference.CreateFromFile(Path.Combine(coreDir, "System.Net.Http.dll"))
-            };
-
-        return CSharpCompilation.Create("compilation",
-            [usingsTree],
-            references,
-            new CSharpCompilationOptions(OutputKind.ConsoleApplication));
-    }
-
-    private static CSharpGeneratorDriver CreateDriver(Compilation compilation, ImmutableArray<AdditionalText> additionalTexts, params ISourceGenerator[] generators)
-        => CSharpGeneratorDriver.Create(
-            generators: ImmutableArray.Create(generators),
-            additionalTexts: additionalTexts,
-            parseOptions: (CSharpParseOptions)compilation.SyntaxTrees.First().Options,
-            optionsProvider: null
-        );
-
-    private static (Compilation, ImmutableArray<Diagnostic>) RunGenerators(
-        Compilation compilation,
-        ImmutableArray<AdditionalText> additionalTexts,
-        params ISourceGenerator[] generators)
-    {
-        CreateDriver(compilation, additionalTexts, generators)
-                .RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out var generatorDiagnostics);
-        return (outputCompilation, generatorDiagnostics);
     }
 }

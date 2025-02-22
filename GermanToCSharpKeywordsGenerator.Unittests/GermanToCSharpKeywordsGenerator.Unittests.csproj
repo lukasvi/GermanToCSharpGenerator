@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Microsoft.NET.Sdk.usings.cs">
+    <Compile Update="Setup\Microsoft.NET.Sdk.usings.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
