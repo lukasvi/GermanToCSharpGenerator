@@ -8,18 +8,20 @@ namespace GermanToCSharpKeywordsGenerator.Unittests.Setup;
 /// <summary>
 /// Class for generating and running a <see cref="CSharpCompilation"/> with Generators for testing purposes.
 /// </summary>
-public class TestCompilationHandler
+public static class TestCompilationHandler
 {
     /// <summary>
     /// Creates a <see cref="CSharpCompilation"/> from SDK base dlls. Can be modified with optional <param name="source"></param>.
     /// </summary>
     /// <param name="source"></param>
-    public CSharpCompilation CreateCompilation(string source = "")
+    public static CSharpCompilation CreateCompilation(string source = "")
     {
-        var syntaxTree = CSharpSyntaxTree.ParseText(source, new CSharpParseOptions(LanguageVersion.Preview));
+        var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp10);
 
-        var globalUsings = File.ReadAllText("Microsoft.NET.Sdk.usings.cs");
-        var usingsTree = CSharpSyntaxTree.ParseText(globalUsings);
+        var syntaxTree = CSharpSyntaxTree.ParseText(source, options);
+
+        var globalUsings = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Setup/Microsoft.NET.Sdk.usings.cs"));
+        var usingsTree = CSharpSyntaxTree.ParseText(globalUsings, options);
 
         var coreDir = RuntimeEnvironment.GetRuntimeDirectory();
 
@@ -48,17 +50,21 @@ public class TestCompilationHandler
     /// <param name="compilation"></param>
     /// <param name="additionalTexts"></param>
     /// <param name="generators"></param>
-    public (Compilation, ImmutableArray<Diagnostic>) RunGenerators(
+    public static GeneratorRunOutput RunGenerators(
         CSharpCompilation compilation,
         ImmutableArray<AdditionalText> additionalTexts,
         params ISourceGenerator[] generators)
     {
         CreateDriver(compilation, additionalTexts, generators)
                 .RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out var generatorDiagnostics);
-        return (outputCompilation, generatorDiagnostics);
+
+        var castCompulation = outputCompilation as CSharpCompilation
+            ?? throw new InvalidOperationException("Output compilation is of invalid type. Only CSharpCompilation is supported");
+
+        return new GeneratorRunOutput() { Compilation = castCompulation, Diagnostics = generatorDiagnostics };
     }
 
-    private CSharpGeneratorDriver CreateDriver(CSharpCompilation compilation, ImmutableArray<AdditionalText> additionalTexts, params ISourceGenerator[] generators)
+    private static CSharpGeneratorDriver CreateDriver(CSharpCompilation compilation, ImmutableArray<AdditionalText> additionalTexts, params ISourceGenerator[] generators)
         => CSharpGeneratorDriver.Create(
             generators: ImmutableArray.Create(generators),
             additionalTexts: additionalTexts,
