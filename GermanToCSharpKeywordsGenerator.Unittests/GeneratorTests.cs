@@ -15,16 +15,15 @@ public class Tests
         var germanSourceFile = @"
             Namenraum Test;
 
-            öffentlich statisch Klasse GeneratedProgram
+            öffentlich statisch Klasse TestProgram
             {
                 öffentlich statisch Leere Main()
                 {
-                    Konsole.SchreibeLinie(""Hallo Welt aus deutschem C#!"");
+                    Console.WriteLine(""Hallo Welt aus deutschem C#!"");
                 }
             }
             ";
-        var additionalText = new TestAdditionalText("GeneratedProgram.dcs", germanSourceFile);
-
+        var additionalText = new TestAdditionalText("TestProgram.dcs", germanSourceFile);
 
         Compilation comp = CreateCompilation(string.Empty);
 
@@ -36,7 +35,7 @@ public class Tests
         newCompilation.GetDiagnostics().Where(x => x.Severity == DiagnosticSeverity.Error).ShouldBeEmpty();
 
         // Assert that class / file has been created
-        newCompilation.GetTypeByMetadataName("Test.GeneratedProgram").ShouldNotBeNull();
+        newCompilation.GetTypeByMetadataName("Test.TestProgram").ShouldNotBeNull();
     }
 
     private static CSharpCompilation CreateCompilation(string source)

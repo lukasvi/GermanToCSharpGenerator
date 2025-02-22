@@ -4,6 +4,6 @@
 {
     öffentlich statisch Leere Main()
     {
-        Konsole.SchreibeLinie("Hallo Welt aus deutschem C#!");
+        Console.WriteLine("Hallo Welt aus deutschem C#!");
     }
 }

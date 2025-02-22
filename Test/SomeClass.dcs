@@ -4,6 +4,6 @@
 {
     privat statisch Leere SomeMethod()
     {
-        Konsole.SchreibeLinie("Dies ist ein Konsolenoutput für Unittests");
+        Console.WriteLine("Dies ist ein Konsolenoutput für Unittests");
     }
 }
