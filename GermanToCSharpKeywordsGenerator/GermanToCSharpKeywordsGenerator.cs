@@ -114,7 +114,6 @@ public class GermanToCSharpKeywordsGenerator : ISourceGenerator
         isEnabledByDefault: true
     );
 
-
     private static readonly DiagnosticDescriptor ClassNotFoundErrorDescriptor = new(
         id: "GEN002",
         title: "Source Generator Execution Error: Class not found",
@@ -142,10 +141,19 @@ public class GermanToCSharpKeywordsGenerator : ISourceGenerator
         isEnabledByDefault: true
     );
 
+    private static readonly DiagnosticDescriptor ClassNameMismatchErrorDescriptor = new(
+        id: "GEN005",
+        title: "Source Generator Execution Warning: Class name does not match file name",
+        messageFormat: "The class name '{0}' does not match the file name '{1}'",
+        category: "Generator",
+        defaultSeverity: DiagnosticSeverity.Warning,
+        isEnabledByDefault: true
+    );
+
     public void Initialize(GeneratorInitializationContext context)
     {
         // No need for explicit additional file registration
-
+        // Activate this if neededfor debugging
 #if DEBUG
         //if (!Debugger.IsAttached)
         //{
@@ -161,12 +169,17 @@ public class GermanToCSharpKeywordsGenerator : ISourceGenerator
             foreach (var file in context.AdditionalFiles)
             {
                 if (!file.Path.EndsWith(".dcs"))
+                {
                     continue;
+                }
 
                 var sourceCode = file.GetText()?.ToString();
-                if (string.IsNullOrWhiteSpace(sourceCode)) continue;
+                if (string.IsNullOrWhiteSpace(sourceCode))
+                {
+                    continue;
+                }
 
-                string newSource = sourceCode!;
+                var newSource = sourceCode!;
 
                 foreach (var keyValuePair in _germanToEnglishKeywords)
                 {
@@ -197,6 +210,17 @@ public class GermanToCSharpKeywordsGenerator : ISourceGenerator
                         location: classDeclarations[0].GetLocation(),
                         additionalLocations: classDeclarations.Skip(1).Select(x => x.GetLocation()),
                         file.Path
+                    ));
+                }
+
+                var expectedClassName = Path.GetFileNameWithoutExtension(file.Path);
+                var classDeclaration = root.DescendantNodes().OfType<ClassDeclarationSyntax>().First();
+                if (!classDeclaration.Identifier.Text.Equals(expectedClassName, StringComparison.OrdinalIgnoreCase))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(
+                        ClassNameMismatchErrorDescriptor,
+                        classDeclaration.Identifier.GetLocation(),
+                        classDeclaration.Identifier.Text, expectedClassName
                     ));
                 }
 
