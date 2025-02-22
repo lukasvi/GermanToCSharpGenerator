@@ -39,7 +39,7 @@ public class Tests
         newCompilation.GetTypeByMetadataName("Test.GeneratedProgram").ShouldNotBeNull();
     }
 
-    private static Compilation CreateCompilation(string source)
+    private static CSharpCompilation CreateCompilation(string source)
     {
         var syntaxTree = CSharpSyntaxTree.ParseText(source, new CSharpParseOptions(LanguageVersion.Preview));
 
@@ -67,7 +67,7 @@ public class Tests
             new CSharpCompilationOptions(OutputKind.ConsoleApplication));
     }
 
-    private static GeneratorDriver CreateDriver(Compilation compilation, ImmutableArray<AdditionalText> additionalTexts, params ISourceGenerator[] generators)
+    private static CSharpGeneratorDriver CreateDriver(Compilation compilation, ImmutableArray<AdditionalText> additionalTexts, params ISourceGenerator[] generators)
         => CSharpGeneratorDriver.Create(
             generators: ImmutableArray.Create(generators),
             additionalTexts: additionalTexts,
