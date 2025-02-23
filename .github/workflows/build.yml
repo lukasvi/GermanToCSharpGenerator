@@ -16,7 +16,17 @@ jobs:
       run: dotnet restore GermanToCSharpKeywordsGenerator.sln
 
     - name: Build
-      run: dotnet build GermanToCSharpKeywordsGenerator.sln
+      run: dotnet build GermanToCSharpKeywordsGenerator.sln --configuration Release
 
-    - name: Test
-      run: dotnet test GermanToCSharpKeywordsGenerator.Unittests/GermanToCSharpKeywordsGenerator.Unittests.csproj
+    - name: Run Unit Tests
+      run: dotnet test GermanToCSharpKeywordsGenerator.Unittests/GermanToCSharpKeywordsGenerator.Unittests.csproj --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
+
+    - name: Generate MSBuild Logs (for Debugging)
+      if: failure()
+      run: dotnet msbuild GermanToCSharpKeywordsGenerator.sln -bl:msbuild.binlog
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: TestResults
+        path: GermanToCSharpKeywordsGenerator.Unittests/TestResults/test_results.trx
