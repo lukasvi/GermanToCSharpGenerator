@@ -17,11 +17,14 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore GermanToCSharpKeywordsGenerator.sln
 
-    - name: Build
-      run: dotnet build GermanToCSharpKeywordsGenerator.sln --configuration Release
+    - name: Build Generator
+      run: dotnet build GermanToCSharpKeywordsGenerator/GermanToCSharpKeywordsGenerator.csproj --configuration Release
+
+    - name: Build Example
+      run: dotnet build Test/Test.csproj --configuration Release
 
     - name: Run Unit Tests
-      run: dotnet test GermanToCSharpKeywordsGenerator.Unittests/GermanToCSharpKeywordsGenerator.Unittests.csproj --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
+      run: dotnet test GermanToCSharpKeywordsGenerator.Unittests/GermanToCSharpKeywordsGenerator.Unittests.csproj --configuration Release --logger "trx;LogFileName=test_results.trx"
 
     - name: Generate MSBuild Logs (for Debugging)
       if: failure()
