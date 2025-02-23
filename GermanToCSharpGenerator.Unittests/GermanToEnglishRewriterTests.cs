@@ -1,6 +1,6 @@
 ﻿using Shouldly;
 
-namespace GermanToCSharpKeywordsGenerator.Unittests;
+namespace GermanToCSharpGenerator.Unittests;
 
 class GermanToEnglishRewriterTests
 {

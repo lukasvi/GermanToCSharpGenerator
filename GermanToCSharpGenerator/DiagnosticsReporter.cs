@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis;
 
-namespace GermanToCSharpKeywordsGenerator;
+namespace GermanToCSharpGenerator;
 
 public static class DiagnosticsReporter
 {

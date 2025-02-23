@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using System.Collections.Immutable;
 using System.Runtime.InteropServices;
 
-namespace GermanToCSharpKeywordsGenerator.Unittests.Setup;
+namespace GermanToCSharpGenerator.Unittests.Setup;
 
 /// <summary>
 /// Class for generating and running a <see cref="CSharpCompilation"/> with Generators for testing purposes.

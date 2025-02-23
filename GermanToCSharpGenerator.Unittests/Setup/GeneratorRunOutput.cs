@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using System.Collections.Immutable;
 
-namespace GermanToCSharpKeywordsGenerator.Unittests.Setup;
+namespace GermanToCSharpGenerator.Unittests.Setup;
 
 public class GeneratorRunOutput()
 {

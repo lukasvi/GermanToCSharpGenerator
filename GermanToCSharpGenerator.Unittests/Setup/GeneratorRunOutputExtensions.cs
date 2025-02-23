@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Shouldly;
 
-namespace GermanToCSharpKeywordsGenerator.Unittests.Setup;
+namespace GermanToCSharpGenerator.Unittests.Setup;
 
 public static class GeneratorRunOutputExtensions
 {

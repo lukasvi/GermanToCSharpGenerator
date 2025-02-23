@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 
-namespace GermanToCSharpKeywordsGenerator;
+namespace GermanToCSharpGenerator;
 
 /// <summary>
 /// This class provides functionality to convert German C# keywords into their English equivalents.

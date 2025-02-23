@@ -15,19 +15,19 @@ jobs:
           2.1.x
 
     - name: Restore dependencies
-      run: dotnet restore GermanToCSharpKeywordsGenerator.sln
+      run: dotnet restore GermanToCSharpGenerator.sln
 
     - name: Build Generator
-      run: dotnet build GermanToCSharpKeywordsGenerator/GermanToCSharpKeywordsGenerator.csproj --configuration Release
+      run: dotnet build GermanToCSharpGenerator/GermanToCSharpGenerator.csproj --configuration Release
 
     - name: Build Example
-      run: dotnet build Test/Test.csproj --configuration Release
+      run: dotnet build GermanToCSharpGenerator.Example/GermanToCSharpGenerator.Example.csproj --configuration Release
 
     - name: Run Unit Tests
-      run: dotnet test GermanToCSharpKeywordsGenerator.Unittests/GermanToCSharpKeywordsGenerator.Unittests.csproj --configuration Release --logger "trx;LogFileName=test_results.trx"
+      run: dotnet test GermanToCSharpGenerator.Unittests/GermanToCSharpGenerator.Unittests.csproj --configuration Release --logger "trx;LogFileName=test_results.trx"
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v4
       with:
         name: TestResults
-        path: GermanToCSharpKeywordsGenerator.Unittests/TestResults/test_results.trx
+        path: GermanToCSharpGenerator.Unittests/TestResults/test_results.trx

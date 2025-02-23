@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using System.Text;
 
-namespace GermanToCSharpKeywordsGenerator.Unittests.Setup;
+namespace GermanToCSharpGenerator.Unittests.Setup;
 
 /// <summary>
 /// Mock implementation of <see cref="AdditionalText"/> for testing purposes.

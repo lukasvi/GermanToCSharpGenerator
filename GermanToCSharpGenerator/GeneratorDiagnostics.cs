@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace GermanToCSharpKeywordsGenerator;
+namespace GermanToCSharpGenerator;
 
 public static class GeneratorDiagnostics
 {

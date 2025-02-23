@@ -1,8 +1,8 @@
-using GermanToCSharpKeywordsGenerator.Unittests.Setup;
+using GermanToCSharpGenerator.Unittests.Setup;
 using Microsoft.CodeAnalysis;
 using Shouldly;
 
-namespace GermanToCSharpKeywordsGenerator.Unittests;
+namespace GermanToCSharpGenerator.Unittests;
 
 public class Tests
 {
@@ -27,7 +27,7 @@ public class Tests
         var comp = TestCompilationHandler.CreateCompilation();
 
         // Act
-        var output = TestCompilationHandler.RunGenerators(comp, [additionalText], new GermanToCSharpKeywordsGenerator());
+        var output = TestCompilationHandler.RunGenerators(comp, [additionalText], new GermanToCSharpGenerator());
 
         // Assert
         output.ShouldContainNoErrorDiagnostics();
