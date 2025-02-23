@@ -13,9 +13,9 @@ public class Tests
         var germanSourceFile = @"
             Namenraum Test;
 
-            öffentlich statisch Klasse TestProgram
+            intern statisch Klasse TestProgram
             {
-                öffentlich statisch Leere Main()
+                privat statisch Leere Main()
                 {
                     Console.WriteLine(""Hallo Welt aus deutschem C#!"");
                 }
